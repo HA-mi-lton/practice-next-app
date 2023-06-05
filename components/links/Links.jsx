@@ -1,5 +1,5 @@
-import styles from "../styles/Home.module.css";
-export default function Main() {
+import styles from "./Links.module.css";
+export default function Links() {
   return (
     <div>
       <main className={styles.main}>
