@@ -1,6 +1,6 @@
 import styles from "./Main.module.css";
-import Links from "../Links/Links";
 import { HeadLine } from "../HeadLine/HeadLine";
+import Links from "../links";
 export default function Main(props) {
   return (
     <main className={styles.main}>
