@@ -14,6 +14,7 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [text, setText] = useState("");
   const [isShow, setIsShow] = useState(true);
+  const [array, setArray] = useState([]);
 
   // const handleClick = (e) => {
   //   setCount((count) => count + 1);
@@ -56,6 +57,14 @@ export default function Home() {
     });
   };
 
+  //一覧表示させるためのコンポーネント
+  const handleAdd = useCallback(() => {
+    setArray((prevArray) => {
+      const newArray = [...prevArray, text];
+      return newArray;
+    });
+  }, [text]);
+
   useEffect(() => {
     //マウント時
     document.body.style.backgroundColor = "lightgreen";
@@ -87,6 +96,12 @@ export default function Home() {
       </button>
       <input type="text" value={text} onChange={handleChange} />
       <button onClick={handleIsShow}>{isShow ? "表示" : "非表示"}</button>
+      <button onClick={handleAdd}>追加</button>
+      <ul>
+        {array.map((item) => {
+          return <li key={item}>{item}</li>;
+        })}
+      </ul>
       <Main />
 
       <Footer />
