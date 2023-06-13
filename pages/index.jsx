@@ -3,78 +3,20 @@ import styles from "../styles/Home.module.css";
 import Footer from "../components/Footer";
 import { Header } from "../components/Header";
 import Main from "../components/Main/Main";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useCounter } from "../hooks/useCounter";
+import { useInputArray } from "../hooks/useInputArray";
 
 export default function Home() {
-  // const handleClick = (e) => {
-  //   e.preventDefault();
-  //   alert(123);
-  // };
-
-  const [count, setCount] = useState(0);
-  const [text, setText] = useState("");
-  const [isShow, setIsShow] = useState(true);
-  const [array, setArray] = useState([]);
-
-  // const handleClick = (e) => {
-  //   setCount((count) => count + 1);
-  // };
-  // const handleClick = (e) => {
-  //   setCount((count) => {
-  //     return count + 1;
-  //   });
-  // };
-
-  const handleClick = useCallback(
-    (e) => {
-      if (count < 10) {
-        setCount((count) => count + 1);
-      }
-    },
-    [count] //ここが空だと無限ループ
-  );
-
-  //let count = 1;
-  // const handleClick = (e) => {
-  //   count = count + 1;
-  //   console.log(count);
-  // };
-
-  //string
-  const handleChange = (e) => {
-    if (e.target.value.length > 5) {
-      alert("5文字以内で入力してください");
-      return;
-    }
-    setText(e.target.value.trim()); //trim()は空白を打てなくさせる
-  };
-
-  //true false
-  const handleIsShow = () => {
-    setIsShow((isShow) => {
-      //return isShow ? false : true;
-      return !isShow;
-    });
-  };
-
-  //一覧表示させるためのコンポーネント
-  const handleAdd = useCallback(() => {
-    setArray((prevArray) => {
-      const newArray = [...prevArray, text];
-      return newArray;
-    });
-  }, [text]);
-
+  const { count, isShow, handleClick, handleDisplay } = useCounter();
+  const { text, array, handleChange, handleAdd } = useInputArray();
+  // ページ遷移時の処理
   useEffect(() => {
-    //マウント時
-    document.body.style.backgroundColor = "lightgreen";
-
+    document.body.style.backgroundColor = "lightblue";
     return () => {
-      //アンマウント時
-      document.body.style.backgroundColor = "pink";
+      document.body.style.backgroundColor = "";
     };
-  }, []);
-
+  }, [count]);
   return (
     <div className={styles.container}>
       <Head>
@@ -84,26 +26,16 @@ export default function Home() {
       </Head>
       <Header />
       {isShow ? <h1>{count}</h1> : null}
-      <button
-        href="/about"
-        onClick={
-          handleClick
-          //preventDefault()：イベントが発生したときにイベントに対してブラウザで設定されているデフォルトの動作をキャンセルさせる
-          //今回はe,preventDefault()を付けることで、<a href="/about"></a>がキャンセルされる
-        }
-      >
-        ボタン
-      </button>
+      <button onClick={handleClick}>ボタン</button>
+      <button onClick={handleDisplay}>{isShow ? "非表示" : "表示"}</button>
       <input type="text" value={text} onChange={handleChange} />
-      <button onClick={handleIsShow}>{isShow ? "表示" : "非表示"}</button>
       <button onClick={handleAdd}>追加</button>
       <ul>
         {array.map((item) => {
           return <li key={item}>{item}</li>;
         })}
       </ul>
-      <Main />
-
+      <Main title="index" />
       <Footer />
     </div>
   );
